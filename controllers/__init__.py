@@ -1,0 +1,1 @@
+from .controlador import processar_cadastro, listar_produtos_controlador, processar_atualizacao, processar_exclusao

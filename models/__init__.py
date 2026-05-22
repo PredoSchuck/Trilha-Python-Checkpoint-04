@@ -1,0 +1,1 @@
+from .modelo import conectar, criar_tabela, inserir_produto, buscar_produtos, atualizar_preco, deletar_produto
