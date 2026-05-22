@@ -1,8 +1,6 @@
 from models import modelo
-# from views import JanelaPadrao
-from views import MenuInicial
-
+from views import TelaLogin
 
 modelo.criar_tabela()
-app = MenuInicial()
+app = TelaLogin()
 app.mainloop()

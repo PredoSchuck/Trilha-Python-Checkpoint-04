@@ -1,11 +1,11 @@
-from views import JanelaPadrao
+from . import JanelaPadrao
 from controllers import controlador as contr
 from tkinter import messagebox
 import customtkinter as ctk
 
 class MenuInicial(JanelaPadrao):
-    def __init__(self):
-        super().__init__()
+    def _init_(self):
+        super()._init_(titulo="ERP - Sistema de Gestão", largura=1000, altura=600)
 
         self.frame_lateral = ctk.CTkFrame(self, width=200, corner_radius=0)
         self.frame_lateral.pack(side="left", fill="y")
@@ -13,29 +13,82 @@ class MenuInicial(JanelaPadrao):
         self.lbl_titulo_menu = ctk.CTkLabel(self.frame_lateral, text="ERP do Futuro", font=self.fonte_titulo)
         self.lbl_titulo_menu.pack(padx=20, pady=20)
 
-        self.frame_central = ctk.CTkFrame(self, corner_radius=10)
-        self.frame_central.pack(side="right", fill="both", expand=True, padx=20, pady=20)
+        self.btn_nav_cadastro = ctk.CTkButton(self.frame_lateral, text="Cadastro de Produto", command=lambda: self.mostrar_frame(self.frame_cadastro))
+        self.btn_nav_cadastro.pack(pady=10, padx=20, fill="x")
 
-        self.lbl_secao = ctk.CTkLabel(self.frame_central, text="Cadastro de Produtos", font=self.fonte_subtitulo)
-        self.lbl_secao.pack(pady=10)
+        self.btn_nav_listar = ctk.CTkButton(self.frame_lateral, text="Listar Produtos", command=lambda: self.mostrar_frame(self.frame_listar))
+        self.btn_nav_listar.pack(pady=10, padx=20, fill="x")
 
-        self.entry_nome = ctk.CTkEntry(self.frame_central, placeholder_text="Nome do Produto", width=300, font=self.fonte_corpo)
-        self.entry_nome.pack(pady=8)
+        self.btn_nav_atualizar = ctk.CTkButton(self.frame_lateral, text="Atualizar Produto", command=lambda: self.mostrar_frame(self.frame_atualizar))
+        self.btn_nav_atualizar.pack(pady=10, padx=20, fill="x")
 
-        self.entry_preco = ctk.CTkEntry(self.frame_central, placeholder_text="Preço (Ex: 19.90)", width=300, font=self.fonte_corpo)
-        self.entry_preco.pack(pady=8)
+        self.btn_nav_excluir = ctk.CTkButton(self.frame_lateral, text="Excluir Produto", command=lambda: self.mostrar_frame(self.frame_excluir))
+        self.btn_nav_excluir.pack(pady=10, padx=20, fill="x")
 
-        self.entry_qtd = ctk.CTkEntry(self.frame_central, placeholder_text="Quantidade em Estoque", width=300, font=self.fonte_corpo)
-        self.entry_qtd.pack(pady=8)
+        self.btn_nav_dash = ctk.CTkButton(self.frame_lateral, text="Dashboard", fg_color="darkred", command=lambda: self.mostrar_frame(self.frame_dash))
+        self.btn_nav_dash.pack(pady=50, padx=20, fill="x")
 
-        self.btn_gravar = ctk.CTkButton(self.frame_central, text="💾 Gravar Produto", font=self.fonte_corpo, command=self.clique_gravar)
-        self.btn_gravar.pack(pady=15)
+        self.frame_cadastro = ctk.CTkFrame(self, corner_radius=10)
+        ctk.CTkLabel(self.frame_cadastro, text="Novo Produto", font=self.fonte_subtitulo).pack(pady=20)
+        
+        self.entry_nome = ctk.CTkEntry(self.frame_cadastro, placeholder_text="Nome do Produto", width=300)
+        self.entry_nome.pack(pady=10)
+        self.entry_preco = ctk.CTkEntry(self.frame_cadastro, placeholder_text="Preço (Ex: 19.90)", width=300)
+        self.entry_preco.pack(pady=10)
+        self.entry_qtd = ctk.CTkEntry(self.frame_cadastro, placeholder_text="Quantidade", width=300)
+        self.entry_qtd.pack(pady=10)
+        
+        self.btn_gravar = ctk.CTkButton(self.frame_cadastro, text="💾 Gravar Produto", command=self.clique_gravar)
+        self.btn_gravar.pack(pady=20)
 
-        self.txt_listagem = ctk.CTkTextbox(self.frame_central, width=500, height=180, font=self.fonte_corpo)
+        self.frame_listar = ctk.CTkFrame(self, corner_radius=10)
+        ctk.CTkLabel(self.frame_listar, text="Estoque Atual", font=self.fonte_subtitulo).pack(pady=20)
+
+        self.entry_pesquisa = ctk.CTkEntry(self.frame_listar, placeholder_text="Pesquisar por nome...", width=400)
+        self.entry_pesquisa.pack(pady=10)
+        self.txt_listagem = ctk.CTkTextbox(self.frame_listar, width=600, height=300)
         self.txt_listagem.pack(pady=10)
-        self.txt_listagem.configure(state="disabled")
 
-        self.atualizar_visualizacao_lista()
+
+        self.frame_atualizar = ctk.CTkFrame(self, corner_radius=10)
+        ctk.CTkLabel(self.frame_atualizar, text="Atualizar Preço", font=self.fonte_subtitulo).pack(pady=20)
+        self.entry_id_att = ctk.CTkEntry(self.frame_atualizar, placeholder_text="ID do Produto", width=300)
+        self.entry_id_att.pack(pady=10)
+        self.entry_preco_novo = ctk.CTkEntry(self.frame_atualizar, placeholder_text="Novo Preço", width=300)
+        self.entry_preco_novo.pack(pady=10)
+        self.btn_att = ctk.CTkButton(self.frame_atualizar, text="Atualizar", command=self.clique_atualizar)
+        self.btn_att.pack(pady=20)
+
+
+        self.frame_excluir = ctk.CTkFrame(self, corner_radius=10)
+        ctk.CTkLabel(self.frame_excluir, text="Deletar Produto", font=self.fonte_subtitulo).pack(pady=20)
+        self.entry_id_del = ctk.CTkEntry(self.frame_excluir, placeholder_text="ID do Produto para Excluir", width=300)
+        self.entry_id_del.pack(pady=10)
+        self.btn_del = ctk.CTkButton(self.frame_excluir, text="Excluir", fg_color="red", hover_color="darkred", command=self.clique_excluir)
+        self.btn_del.pack(pady=20)
+
+
+        self.frame_dash = ctk.CTkFrame(self, corner_radius=10)
+        ctk.CTkLabel(self.frame_dash, text="Dashboard Analítico", font=self.fonte_subtitulo).pack(pady=20)
+
+
+        self.frames = [self.frame_cadastro, self.frame_listar, self.frame_atualizar, self.frame_excluir, self.frame_dash]
+        
+
+        self.mostrar_frame(self.frame_cadastro)
+
+
+    def mostrar_frame(self, frame_desejado):
+        """Esconde todos os frames e exibe apenas o selecionado."""
+        for frame in self.frames:
+            frame.pack_forget() 
+
+        frame_desejado.pack(side="right", fill="both", expand=True, padx=20, pady=20)
+        
+
+        if frame_desejado == self.frame_listar:
+            self.atualizar_visualizacao_lista()
+
 
     def clique_gravar(self):
         nome = self.entry_nome.get()
@@ -47,7 +100,6 @@ class MenuInicial(JanelaPadrao):
             self.entry_nome.delete(0, 'end')
             self.entry_preco.delete(0, 'end')
             self.entry_qtd.delete(0, 'end')
-            self.atualizar_visualizacao_lista()
         else:
             messagebox.showerror("Erro", mensagem)
 
@@ -56,9 +108,17 @@ class MenuInicial(JanelaPadrao):
         self.txt_listagem.delete("1.0", "end")
         produtos = contr.listar_produtos_controlador()
         if not produtos:
-            self.txt_listagem.insert("end", "Nenhum produto cadastrado.")
+            self.txt_listagem.insert("end", "Nenhum produto no banco.")
         else:
             for prod in produtos:
-                linha = f"ID: {prod[0]} | Produto: {prod[1]} | Preço: R$ {prod[2]:.2f} | Estoque: {prod[3]} un\n"
+                linha = f"ID: {prod[0]} | Nome: {prod[1]} | R$ {prod[2]:.2f} | Qtd: {prod[3]}\n"
                 self.txt_listagem.insert("end", linha)
         self.txt_listagem.configure(state="disabled")
+
+    def clique_atualizar(self):
+        sucesso, msg = contr.processar_atualizacao(self.entry_id_att.get(), self.entry_preco_novo.get())
+        messagebox.showinfo("Aviso", msg) if sucesso else messagebox.showerror("Erro", msg)
+
+    def clique_excluir(self):
+        sucesso, msg = contr.processar_exclusao(self.entry_id_del.get())
+        messagebox.showinfo("Aviso", msg) if sucesso else messagebox.showerror("Erro", msg)
