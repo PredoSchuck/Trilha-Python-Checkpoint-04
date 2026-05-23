@@ -60,5 +60,6 @@ Desenvolvido por:
 
 Pedro Schuck
 GitHub: https://github.com/PredoSchuck
+
 Douglas Meneguetti
 GitHub: https://github.com/dodomeneguetti-ai
