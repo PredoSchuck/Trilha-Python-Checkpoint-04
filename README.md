@@ -16,7 +16,7 @@ Tkinter
 Git & GitHub
 
 Estrutura do projeto
-
+```
 Trilha-Python-Checkpoint-04/
 │
 ├── controllers/
@@ -27,7 +27,7 @@ Trilha-Python-Checkpoint-04/
 ├── inventario.db
 ├── main.py
 └── README.md
-
+```
 Funcionalidades
 
 Sistema de login
