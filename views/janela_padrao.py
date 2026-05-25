@@ -1,7 +1,6 @@
 import os
 import customtkinter as ctk
 
-# Garante que o motor de cores inicie corretamente
 ctk.set_appearance_mode("Dark")
 
 class JanelaPadrao(ctk.CTk):

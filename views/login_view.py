@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from tkinter import messagebox
-from controllers import controlador as contr
+import controllers
 
 class TelaLogin(ctk.CTkToplevel):
     def __init__(self, app_principal):
@@ -35,7 +35,7 @@ class TelaLogin(ctk.CTkToplevel):
         usuario = self.entry_usuario.get()
         senha = self.entry_senha.get()
 
-        sucesso, mensagem = contr.processar_login(usuario, senha)
+        sucesso, mensagem = controllers.LoginController.processar_login(usuario, senha)
 
         if sucesso:
             self.destroy()
@@ -44,5 +44,4 @@ class TelaLogin(ctk.CTkToplevel):
             messagebox.showerror("Erro de Autenticação", mensagem)
             
     def fechar_sistema(self):
-        """Se desistir de logar e clicar no X vermelho, mata a raiz."""
         self.app_principal.destroy()

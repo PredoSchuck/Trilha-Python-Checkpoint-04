@@ -1,7 +1,7 @@
-import customtkinter as ctk
 from tkinter import messagebox
-from views.janela_padrao import JanelaPadrao
-from controllers import controlador as contr
+from .janela_padrao import JanelaPadrao
+import controllers 
+import customtkinter as ctk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -86,10 +86,14 @@ class MenuInicial(JanelaPadrao):
         
         self.entry_id_att = ctk.CTkEntry(self.frame_atualizar, placeholder_text="ID do Produto", width=300, font=self.fonte_corpo)
         self.entry_id_att.pack(pady=10)
+
         self.entry_preco_novo = ctk.CTkEntry(self.frame_atualizar, placeholder_text="Novo Preço", width=300, font=self.fonte_corpo)
         self.entry_preco_novo.pack(pady=10)
         
-        self.btn_att = ctk.CTkButton(self.frame_atualizar, text="Atualizar", font=self.fonte_corpo, command=self.clique_atualizar)
+        self.entry_qtd_nova = ctk.CTkEntry(self.frame_atualizar, placeholder_text="Nova Quantidade", width=300, font=self.fonte_corpo)
+        self.entry_qtd_nova.pack(pady=10)
+        
+        self.btn_att = ctk.CTkButton(self.frame_atualizar, text="Atualizar Dados", font=self.fonte_corpo, command=self.clique_atualizar)
         self.btn_att.pack(pady=20)
 
         self.frame_excluir = ctk.CTkFrame(self, corner_radius=10)
@@ -133,18 +137,7 @@ class MenuInicial(JanelaPadrao):
         
         self.mostrar_frame(self.frame_cadastro)
 
-    def mostrar_frame(self, frame_desejado):
-        """Oculta todos os frames centrais e exibe apenas o selecionado."""
-        for frame in self.frames:
-            frame.pack_forget()
-            
-        frame_desejado.pack(side="right", fill="both", expand=True, padx=20, pady=20)
-        
-        if frame_desejado == self.frame_listar:
-            self.atualizar_visualizacao_lista()
-
     def alternar_tema(self):
-        """Muda dinamicamente a aparência visual do CustomTkinter."""
         if self.switch_tema.get() == 1:
             ctk.set_appearance_mode("Light")
             self.switch_tema.configure(text="Modo Escuro")
@@ -157,7 +150,7 @@ class MenuInicial(JanelaPadrao):
         preco = self.entry_preco.get()
         qtd = self.entry_qtd.get()
         
-        sucesso, mensagem = contr.processar_cadastro(nome, preco, qtd)
+        sucesso, mensagem = controllers.ProdutoController.processar_cadastro(nome, preco, qtd)
         if sucesso:
             messagebox.showinfo("Sucesso!", mensagem)
             self.entry_nome.delete(0, 'end')
@@ -167,11 +160,10 @@ class MenuInicial(JanelaPadrao):
             messagebox.showerror("Erro de Validação", mensagem)
 
     def atualizar_visualizacao_lista(self):
-        """Solicita os dados ao controlador e atualiza a caixa de texto."""
         self.txt_listagem.configure(state="normal")
         self.txt_listagem.delete("1.0", "end")
         
-        produtos = contr.listar_produtos_controlador()
+        produtos = controllers.ProdutoController.listar_produtos_controlador()
         if not produtos:
             self.txt_listagem.insert("end", "Nenhum produto cadastrado no momento.")
         else:
@@ -184,19 +176,22 @@ class MenuInicial(JanelaPadrao):
     def clique_atualizar(self):
         id_txt = self.entry_id_att.get()
         preco_txt = self.entry_preco_novo.get()
+        qtd_txt = self.entry_qtd_nova.get()
+
+        sucesso, msg = controllers.ProdutoController.processar_atualizacao(id_txt, preco_txt, qtd_txt)
         
-        sucesso, msg = contr.processar_atualizacao(id_txt, preco_txt)
         if sucesso:
             messagebox.showinfo("Sucesso", msg)
             self.entry_id_att.delete(0, 'end')
             self.entry_preco_novo.delete(0, 'end')
+            self.entry_qtd_nova.delete(0, 'end')
         else:
             messagebox.showerror("Erro", msg)
 
     def clique_excluir(self):
         id_txt = self.entry_id_del.get()
         
-        sucesso, msg = contr.processar_exclusao(id_txt)
+        sucesso, msg = controllers.ProdutoController.processar_exclusao(id_txt)
         if sucesso:
             messagebox.showinfo("Sucesso", msg)
             self.entry_id_del.delete(0, 'end')
@@ -208,7 +203,7 @@ class MenuInicial(JanelaPadrao):
         senha = self.entry_nova_senha.get()
         confirmacao = self.entry_confirmar_senha.get()
         
-        sucesso, mensagem = contr.processar_cadastro_usuario(usuario, senha, confirmacao)
+        sucesso, mensagem = controllers.LoginController.processar_cadastro_usuario(usuario, senha, confirmacao)
         if sucesso:
             messagebox.showinfo("Sucesso!", mensagem)
             self.entry_novo_user.delete(0, 'end')
@@ -224,7 +219,7 @@ class MenuInicial(JanelaPadrao):
                 continue
             widget.destroy()
 
-        dados = contr.obter_dados_dashboard()
+        dados = controllers.DashboardController.obter_dados_dashboard()
 
         if not dados:
             ctk.CTkLabel(self.frame_dash, text="Sem dados suficientes para gerar o gráfico.", font=self.fonte_corpo).pack(pady=50)

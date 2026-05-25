@@ -1,1 +1,3 @@
-from .controlador import processar_cadastro, listar_produtos_controlador, processar_atualizacao, processar_exclusao, processar_login
+from .dashboard_controller import DashboardController
+from .produto_controller import ProdutoController
+from .usuario_controller import LoginController
